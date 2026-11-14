@@ -8,6 +8,8 @@ player = {
     regenTime = 60
 }
 
+showHitboxes = false -- set to true for hitboxes
+
 bullets = {}
 
 function love.load()
@@ -133,12 +135,12 @@ function love.update(dt)
             destroyBullet(bullet)
         end
 
-        local difX = (player.x + player.width / 2) - bullet.x
-        local difY = (player.y + player.height / 2) - bullet.y
+        local difX = (player.x + player.width / 2) - (bullet.x + 16)
+        local difY = (player.y + player.height / 2) - (bullet.y + 16)
         local dif = math.sqrt(math.pow(difX, 2) + math.pow(difY, 2))
 
         if bullet.lifetime < 14
-        and dif <= 7 then
+        and dif <= 23 then
             destroyBullet(bullet)
             player.health = player.health - 10
         end
@@ -149,11 +151,21 @@ function love.draw()
     local r, g, b = love.math.colorFromBytes(181, 157, 164)
     love.graphics.clear(r, g, b)
     love.graphics.setBackgroundColor( r, g, b )
+    love.graphics.setColor(1, 1, 1)
 
     love.graphics.draw(yotsuba, player.x, player.y)
-    love.graphics.ellipse("fill", player.x + player.width/2, player.y + player.height/2, 7, 7)
     love.graphics.print("Health: " .. player.health, 450, 20, 0, 2, 2)
     for _, bullet in ipairs(bullets) do
+        love.graphics.setColor(1, 1, 1)
         love.graphics.draw(bulletimg, bullet.x, bullet.y)
+        love.graphics.setColor(1, 0, 0)
+        if showHitboxes then
+            love.graphics.circle("line", bullet.x + 16, bullet.y + 16, 16)
+        end
+    end
+
+    love.graphics.setColor(0, 0, 1)
+    if showHitboxes then
+        love.graphics.circle("line", player.x + player.width / 2, player.y + player.height / 2, 7)
     end
 end
