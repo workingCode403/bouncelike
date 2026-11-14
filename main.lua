@@ -133,11 +133,12 @@ function love.update(dt)
             destroyBullet(bullet)
         end
 
+        local difX = (player.x + player.width / 2) - bullet.x
+        local difY = (player.y + player.height / 2) - bullet.y
+        local dif = math.sqrt(math.pow(difX, 2) + math.pow(difY, 2))
+
         if bullet.lifetime < 14
-        and bullet.x > player.x
-        and bullet.x < player.x + player.width
-        and bullet.y > player.y
-        and bullet.y < player.y + player.height then
+        and dif <= 7 then
             destroyBullet(bullet)
             player.health = player.health - 10
         end
@@ -150,7 +151,8 @@ function love.draw()
     love.graphics.setBackgroundColor( r, g, b )
 
     love.graphics.draw(yotsuba, player.x, player.y)
-
+    love.graphics.ellipse("fill", player.x + player.width/2, player.y + player.height/2, 7, 7)
+    love.graphics.print("Health: " .. player.health, 450, 20, 0, 2, 2)
     for _, bullet in ipairs(bullets) do
         love.graphics.draw(bulletimg, bullet.x, bullet.y)
     end
