@@ -2,19 +2,20 @@ local patterns = require("patterns")
 player = {
     x = 100,
     y = 100,
-    speed = 500,
+    speed = 300,
     direction = "right",
-    health = 100,
-    regen = 2,
+    health = 1000,
+    regen = 20,
     regenTime = 60
 }
 
-showHitboxes = false -- set to true for hitboxes
+showHitboxes = true -- set to true for hitboxes
 
 bullets = {}
 
 function love.load()
     yotsuba = love.graphics.newImage("ys.png")
+    bossimg = love.graphics.newImage("eys.png")
     bulletimg = love.graphics.newImage("bullet.png")
     pbulletimg = love.graphics.newImage("pink2.png")
     bulletTimerMax = 0.2
@@ -57,7 +58,7 @@ function spawnPBullet(x, y, dx, dy)
 end
 
 function love.update(dt)
-    if player.health < 100 and player.regenTime == 60 then
+    if player.health < 1000 and player.regenTime == 60 then
         player.health = player.health + player.regen
         player.regenTime = player.regenTime - 1
     end
@@ -96,7 +97,10 @@ function love.update(dt)
     end
 
     if love.keyboard.isDown("k") then
-        patterns.circle(500, 500, 1)
+        patterns.circle(450, 0, 1)
+    end
+    if love.keyboard.isDown("j") then
+        patterns.star(450, 0, 1)
     end
 
     bulletTimer = bulletTimer - dt
@@ -173,7 +177,8 @@ function love.draw()
     love.graphics.setColor(1, 1, 1)
 
     love.graphics.draw(yotsuba, player.x, player.y)
-    love.graphics.print("Health: " .. player.health, 450, 20, 0, 2, 2)
+    love.graphics.draw(bossimg, 430, 0)
+    love.graphics.print("Health: " .. player.health, 600, 430, 0, 2, 2)
     for _, bullet in ipairs(bullets) do
         love.graphics.setColor(1, 1, 1)
         if bullet.player then
@@ -187,8 +192,8 @@ function love.draw()
         end
     end
 
-    love.graphics.setColor(0, 0, 1)
+    love.graphics.setColor(255, 255, 255)
     if showHitboxes then
-        love.graphics.circle("line", player.x + player.width / 2, player.y + player.height / 2, 7)
+        love.graphics.circle("fill", player.x + player.width / 2, player.y + player.height / 2, 7)
     end
 end
