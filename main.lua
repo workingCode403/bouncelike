@@ -16,6 +16,7 @@ bullets = {}
 function love.load()
     yotsuba = love.graphics.newImage("ys.png")
     bulletimg = love.graphics.newImage("bullet.png")
+    pbulletimg = love.graphics.newImage("pink2.png")
     bulletTimerMax = 0.2
     bulletTimer = 0
     bulletSpeed = 600
@@ -39,7 +40,19 @@ function spawnBullet(x, y, dx, dy)
         y = y,
         dx = dx,
         dy = dy,
-        lifetime = 15.0
+        lifetime = 15.0,
+        player = false
+    })
+end
+
+function spawnPBullet(x, y, dx, dy)
+    table.insert(bullets, {
+        x = x,
+        y = y,
+        dx = dx,
+        dy = dy,
+        lifetime = 15.0,
+        player = true
     })
 end
 
@@ -101,7 +114,7 @@ function love.update(dt)
             dy = 1
         end
 
-        spawnBullet(
+        spawnPBullet(
             player.x + player.width / 2,
             player.y + player.height / 2,
             dx,
@@ -145,7 +158,8 @@ function love.update(dt)
         local dif = math.sqrt(math.pow(difX, 2) + math.pow(difY, 2))
 
         if bullet.lifetime < 14
-        and dif <= 23 then
+        and dif <= 23
+        and not bullet.player then
             table.remove(bullets, i)
             player.health = player.health - 10
         end
@@ -162,7 +176,11 @@ function love.draw()
     love.graphics.print("Health: " .. player.health, 450, 20, 0, 2, 2)
     for _, bullet in ipairs(bullets) do
         love.graphics.setColor(1, 1, 1)
-        love.graphics.draw(bulletimg, bullet.x, bullet.y)
+        if bullet.player then
+            love.graphics.draw(pbulletimg, bullet.x, bullet.y)
+        else
+            love.graphics.draw(bulletimg, bullet.x, bullet.y)
+        end
         love.graphics.setColor(1, 0, 0)
         if showHitboxes then
             love.graphics.circle("line", bullet.x + 16, bullet.y + 16, 16)
