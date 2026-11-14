@@ -42,14 +42,6 @@ function spawnBullet(x, y, dx, dy)
     })
 end
 
-function destroyBullet(bullet)
-    for j, v in ipairs(bullets) do
-        if (v == bullet) then
-            table.remove(bullets, j)
-        end
-    end
-end
-
 function love.update(dt)
     if player.health < 100 and player.regenTime == 60 then
         player.health = player.health + player.regen
@@ -132,7 +124,7 @@ function love.update(dt)
 
         bullet.lifetime = bullet.lifetime - dt
         if bullet.lifetime <= 0 then
-            destroyBullet(bullet)
+            table.remove(bullets, i)
         end
 
         local difX = (player.x + player.width / 2) - (bullet.x + 16)
@@ -141,7 +133,7 @@ function love.update(dt)
 
         if bullet.lifetime < 14
         and dif <= 23 then
-            destroyBullet(bullet)
+            table.remove(bullets, i)
             player.health = player.health - 10
         end
     end
