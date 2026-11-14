@@ -17,20 +17,6 @@ function love.load()
 
     player.width = yotsuba:getWidth()
     player.height = yotsuba:getHeight()
-
-    tileSize = 16
-    tilemap = {}
-
-    local w = math.ceil(love.graphics.getWidth() / tileSize)
-    local h = math.ceil(love.graphics.getHeight() / tileSize)
-
-    for y = 1, h do
-        tilemap[y] = {}
-
-        for x = 1, w do
-            tilemap[y][x] = (x == 1 or x == w or y == 1 or y == h) and 1 or 0
-        end
-    end
 end
 
 function checkCollision(a, b)
@@ -50,45 +36,28 @@ function spawnBullet(x, y, dx, dy)
 end
 
 function love.update(dt)
-    local oldX = player.x
-    local oldY = player.y
-
-    if love.keyboard.isDown("a") then
+    if love.keyboard.isDown("a")
+    and player.x > 0 then
         player.x = player.x - player.speed * dt
         player.direction = "left"
     end
 
-    if love.keyboard.isDown("d") then
+    if love.keyboard.isDown("d")
+    and player.x < love.graphics.getWidth() - player.width then
         player.x = player.x + player.speed * dt
         player.direction = "right"
     end
 
-    if love.keyboard.isDown("w") then
+    if love.keyboard.isDown("w")
+    and player.y > 0 then
         player.y = player.y - player.speed * dt
         player.direction = "up"
     end
 
-    if love.keyboard.isDown("s") then
+    if love.keyboard.isDown("s")
+    and player.y < love.graphics.getHeight() - player.height then
         player.y = player.y + player.speed * dt
         player.direction = "down"
-    end
-
-    for i, row in ipairs(tilemap) do
-        for j, tile in ipairs(row) do
-            if tile == 1 then
-                local wall = {
-                    x = (j - 1) * tileSize,
-                    y = (i - 1) * tileSize,
-                    width = tileSize,
-                    height = tileSize
-                }
-
-                if checkCollision(player, wall) then
-                    player.x = oldX
-                    player.y = oldY
-                end
-            end
-        end
     end
 
     bulletTimer = bulletTimer - dt
@@ -142,19 +111,5 @@ function love.draw()
 
     for _, bullet in ipairs(bullets) do
         love.graphics.draw(bulletimg, bullet.x, bullet.y)
-    end
-
-    for i, row in ipairs(tilemap) do
-        for j, tile in ipairs(row) do
-            if tile == 1 then
-                love.graphics.rectangle(
-                    "line",
-                    (j - 1) * tileSize,
-                    (i - 1) * tileSize,
-                    tileSize,
-                    tileSize
-                )
-            end
-        end
     end
 end
