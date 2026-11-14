@@ -1,3 +1,4 @@
+local patterns = require("patterns")
 player = {
     x = 100,
     y = 100,
@@ -18,7 +19,7 @@ function love.load()
     bulletTimerMax = 0.2
     bulletTimer = 0
     bulletSpeed = 600
-    love.window.setMode(1000, 1000)
+    love.window.setMode(1000, 700)
     love.window.setTitle("BOUNCELIKE")
 
     player.width = yotsuba:getWidth()
@@ -81,6 +82,10 @@ function love.update(dt)
         player.direction = "down"
     end
 
+    if love.keyboard.isDown("k") then
+        patterns.circle(500, 500, 1)
+    end
+
     bulletTimer = bulletTimer - dt
 
     if love.keyboard.isDown("l") and bulletTimer <= 0 then
@@ -112,13 +117,21 @@ function love.update(dt)
         bullet.x = bullet.x + bullet.dx * bulletSpeed * dt
         bullet.y = bullet.y + bullet.dy * bulletSpeed * dt
 
-        if bullet.x < 0
-        or bullet.x > love.graphics.getWidth() then
+        if bullet.x < 0 then
+            bullet.x = 0
+            bullet.dx = bullet.dx * -1
+        end
+        if bullet.x > love.graphics.getWidth() - 32 then
+            bullet.x = love.graphics.getWidth() - 32
             bullet.dx = bullet.dx * -1
         end
 
-        if bullet.y < 0
-        or bullet.y > love.graphics.getHeight() then
+        if bullet.y < 0 then
+            bullet.y = 0
+            bullet.dy = bullet.dy * -1
+        end
+        if bullet.y > love.graphics.getHeight() - 32 then
+            bullet.y = love.graphics.getHeight() - 32
             bullet.dy = bullet.dy * -1
         end
 
