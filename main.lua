@@ -1,7 +1,7 @@
 player = {
     x = 100,
     y = 100,
-    speed = 300,
+    speed = 500,
     direction = "right"
 }
 
@@ -31,7 +31,8 @@ function spawnBullet(x, y, dx, dy)
         x = x,
         y = y,
         dx = dx,
-        dy = dy
+        dy = dy,
+        lifetime = 15.0
     })
 end
 
@@ -99,6 +100,15 @@ function love.update(dt)
         if bullet.y < 0
         or bullet.y > love.graphics.getHeight() then
             bullet.dy = bullet.dy * -1
+        end
+
+        bullet.lifetime = bullet.lifetime - dt
+        if bullet.lifetime <= 0 then
+            for j, v in ipairs(bullets) do
+                if (v == bullet) then
+                    table.remove(bullets, j)
+                end
+            end
         end
     end
 end
