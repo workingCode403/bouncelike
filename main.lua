@@ -148,13 +148,6 @@ function love.update(dt)
         player.direction = "down"
     end
 
-    if love.keyboard.isDown("k") then
-        patterns.doubleFibArc(450, 0, 1)
-    end
-    if love.keyboard.isDown("j") then
-        patterns.star(450, 0, 1)
-    end
-
     bulletTimer = bulletTimer - dt
 
     if love.keyboard.isDown("l")
