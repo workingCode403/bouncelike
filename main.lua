@@ -152,6 +152,10 @@ function love.update(dt)
         player.direction = "down"
     end
 
+    if love.keyboard.isDown("k") then
+        showHitboxes = not showHitboxes
+    end
+
     bulletTimer = bulletTimer - dt
 
     if love.keyboard.isDown("l")
@@ -232,9 +236,8 @@ function love.update(dt)
 end
 
 function love.draw()
-    local r, g, b = love.math.colorFromBytes(181, 157, 164)
-    love.graphics.clear(r, g, b)
-    love.graphics.setBackgroundColor( r, g, b )
+    love.graphics.clear(0.7, 0.61, 0.64)
+    love.graphics.setBackgroundColor(0.7, 0.61, 0.64)
     love.graphics.setColor(1, 1, 1)
 
     love.graphics.draw(yotsuba, player.x, player.y)
