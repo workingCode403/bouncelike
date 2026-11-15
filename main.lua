@@ -10,16 +10,17 @@ player = {
     dead = false
 }
 
-bossHealth = 400
+bossHealth = 40000
 bossDead = false
 bossTimer = 120
 bossAttack = 0
 
-showHitboxes = true -- set to true for hitboxes
+showHitboxes = false -- set to true for hitboxes
 
 bullets = {}
 
 function love.load()
+    math.randomseed(os.time())
     yotsuba = love.graphics.newImage("ys.png")
     bossimg = love.graphics.newImage("eys.png")
     bulletimg = love.graphics.newImage("bullet.png")
@@ -81,8 +82,11 @@ function love.update(dt)
             bossTimer = 1020
         end
 
-        if bossAttack ~= 0 then
+        if bossAttack == 1
+        or bossAttack == 2 then
             bossTimer = 144
+        elseif bossAttack ~= 0 then
+            bossTimer = 72
         end
     elseif bossAttack == 1
     and bossTimer > 0 then
@@ -237,7 +241,6 @@ function love.draw()
     love.graphics.draw(bossimg, 430, 0)
     love.graphics.print("Health: " .. player.health, 400, 650, 0, 2, 2)
     love.graphics.print("Boss health: " .. bossHealth, 385, 0, 0, 2, 2)
-    love.graphics.print("bossTimer: " .. bossTimer, 0, 0, 0, 2, 2)
     for _, bullet in ipairs(bullets) do
         love.graphics.setColor(1, 1, 1)
         if bullet.player then
